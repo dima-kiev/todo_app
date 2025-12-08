@@ -1,18 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import SmartText from './SmartText';
 
 export default function TodoItem({ item, pressHandler, deleteHandler }) {
   return (
     <View style={styles.itemContainer}>
-      <TouchableOpacity onPress={() => pressHandler(item.key)} style={styles.itemTextContainer}>
+      <TouchableOpacity onPress={() => pressHandler(item.id)} style={styles.itemTextContainer}>
         <View style={[styles.checkbox, item.completed && styles.checkboxChecked]}>
           {item.completed && <Text style={styles.checkmark}>✓</Text>}
         </View>
-        <Text style={[styles.itemText, item.completed && styles.itemTextChecked]}>
-          {item.text}
-        </Text>
+        <SmartText style={[styles.itemText, item.completed && styles.itemTextChecked]} text={item.text} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => deleteHandler(item.key)} style={styles.deleteButton}>
+      <TouchableOpacity onPress={() => deleteHandler(item.id)} style={styles.deleteButton}>
         <Text style={styles.deleteText}>✕</Text>
       </TouchableOpacity>
     </View>
