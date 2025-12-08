@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, Button, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
 
 export default function AddTodo({ submitHandler }) {
     const [text, setText] = useState('');
+    const { colors } = useTheme();
 
     const changeHandler = (val) => {
         setText(val);
@@ -14,15 +16,18 @@ export default function AddTodo({ submitHandler }) {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: colors.card, shadowColor: colors.text }]}>
             <TextInput
-                style={styles.input}
+                style={[styles.input, { color: colors.text }]}
                 placeholder='Add new task...'
-                placeholderTextColor="#A0A0A0"
+                placeholderTextColor={colors.text + '80'} // Adding transparency
                 onChangeText={changeHandler}
                 value={text}
             />
-            <TouchableOpacity onPress={handlePress} style={styles.button}>
+            <TouchableOpacity
+                onPress={handlePress}
+                style={[styles.button, { backgroundColor: colors.primary }]}
+            >
                 <Text style={styles.buttonText}>+</Text>
             </TouchableOpacity>
         </View>
@@ -33,12 +38,10 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#fff',
         borderRadius: 30,
         paddingHorizontal: 15,
         paddingVertical: 5,
         elevation: 5,
-        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -48,10 +51,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 10,
         fontSize: 16,
-        color: '#333',
     },
     button: {
-        backgroundColor: '#6C63FF',
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -63,6 +64,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 24,
-        marginTop: -2, // Center the + slightly better
+        marginTop: -2,
     }
 });

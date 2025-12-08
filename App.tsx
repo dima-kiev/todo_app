@@ -7,8 +7,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-import { TodoProvider } from './context/TodoContext';
 import SettingsScreen from './screens/SettingsScreen';
 
 const Drawer = createDrawerNavigator();
@@ -43,11 +44,11 @@ function AppContent() {
 function App() {
   return (
     <SafeAreaProvider>
-      <ThemeProvider>
-        <TodoProvider>
+      <Provider store={store}>
+        <ThemeProvider>
           <AppContent />
-        </TodoProvider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </Provider>
     </SafeAreaProvider>
   );
 }
