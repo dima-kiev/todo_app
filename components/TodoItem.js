@@ -4,9 +4,11 @@ import Animated, { FadeIn, FadeOut, Layout, useSharedValue, useAnimatedStyle, wi
 import SmartText from './SmartText';
 import { useTheme } from '../context/ThemeContext';
 
-export default function TodoItem({ item, pressHandler, deleteHandler }) {
+const TodoItem = React.memo(({ item, pressHandler, deleteHandler }) => {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
+
+  console.log(`Rendering TodoItem: ${item.id}`);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -51,7 +53,9 @@ export default function TodoItem({ item, pressHandler, deleteHandler }) {
       </TouchableOpacity>
     </Animated.View>
   );
-}
+});
+
+export default TodoItem;
 
 const styles = StyleSheet.create({
   itemContainer: {

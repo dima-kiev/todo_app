@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
@@ -12,17 +12,17 @@ export default function HomeScreen() {
     const dispatch = useDispatch();
     const { colors } = useTheme();
 
-    const handleAddTodo = (text: string) => {
+    const handleAddTodo = useCallback((text: string) => {
         dispatch(addTodo(text));
-    };
+    }, [dispatch]);
 
-    const handleToggleTodo = (id: string) => {
+    const handleToggleTodo = useCallback((id: string) => {
         dispatch(toggleTodo(id));
-    };
+    }, [dispatch]);
 
-    const handleDeleteTodo = (id: string) => {
+    const handleDeleteTodo = useCallback((id: string) => {
         dispatch(removeTodo(id));
-    };
+    }, [dispatch]);
 
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
