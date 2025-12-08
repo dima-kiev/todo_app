@@ -5,7 +5,7 @@ import SmartText from './SmartText';
 import { useTheme } from '../context/ThemeContext';
 import dayjs from 'dayjs';
 
-const TodoItem = React.memo(({ item, pressHandler, deleteHandler }) => {
+const TodoItem = React.memo(({ item, pressHandler, deleteHandler, editHandler }) => {
   const { colors } = useTheme();
   const scale = useSharedValue(1);
 
@@ -49,14 +49,28 @@ const TodoItem = React.memo(({ item, pressHandler, deleteHandler }) => {
             ]}
             text={item.text}
           />
-          <Text style={[styles.dateText, { color: colors.text }]}>
-            {dayjs(item.createdAt).format('MMM D, YYYY h:mm A')}
-          </Text>
+          <View style={styles.detailsRow}>
+            {item.category && (
+              <View style={[styles.categoryBadge, { borderColor: colors.border }]}>
+                <Text style={[styles.categoryText, { color: colors.text }]}>{item.category}</Text>
+              </View>
+            )}
+            <Text style={[styles.dateText, { color: colors.text }]}>
+              {dayjs(item.createdAt).format('MMM D, h:mm A')}
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => deleteHandler(item.id)} style={styles.deleteButton}>
-        <Text style={styles.deleteText}>✕</Text>
-      </TouchableOpacity>
+
+      <View style={styles.actions}>
+        <TouchableOpacity onPress={editHandler} style={styles.actionButton}>
+          <Text style={styles.actionText}>✎</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => deleteHandler(item.id)} style={styles.deleteButton}>
+          <Text style={styles.deleteText}>✕</Text>
+        </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 });
@@ -118,5 +132,34 @@ const styles = StyleSheet.create({
     color: '#FF6B6B',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  detailsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+  },
+  categoryBadge: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    marginRight: 8,
+  },
+  categoryText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  actions: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    marginLeft: 10,
+  },
+  actionButton: {
+    padding: 5,
+    marginBottom: 5,
+  },
+  actionText: {
+    fontSize: 20,
+    color: '#4A90E2',
   },
 });
