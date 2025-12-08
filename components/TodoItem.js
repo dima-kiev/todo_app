@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeIn, FadeOut, Layout, useSharedValue, useAnimatedStyle, withSpring, withSequence } from 'react-native-reanimated';
 import SmartText from './SmartText';
 import { useTheme } from '../context/ThemeContext';
+import dayjs from 'dayjs';
 
 const TodoItem = React.memo(({ item, pressHandler, deleteHandler }) => {
   const { colors } = useTheme();
@@ -39,14 +40,19 @@ const TodoItem = React.memo(({ item, pressHandler, deleteHandler }) => {
         <View style={[styles.checkbox, { borderColor: colors.primary }, item.completed && { backgroundColor: colors.primary }]}>
           {item.completed && <Text style={styles.checkmark}>✓</Text>}
         </View>
-        <SmartText
-          style={[
-            styles.itemText,
-            { color: colors.text },
-            item.completed && styles.itemTextChecked
-          ]}
-          text={item.text}
-        />
+        <View style={styles.textWrapper}>
+          <SmartText
+            style={[
+              styles.itemText,
+              { color: colors.text },
+              item.completed && styles.itemTextChecked
+            ]}
+            text={item.text}
+          />
+          <Text style={[styles.dateText, { color: colors.text }]}>
+            {dayjs(item.createdAt).format('MMM D, YYYY h:mm A')}
+          </Text>
+        </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => deleteHandler(item.id)} style={styles.deleteButton}>
         <Text style={styles.deleteText}>✕</Text>
@@ -76,9 +82,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemText: {
-    marginLeft: 15,
     fontSize: 18,
     fontWeight: '500',
+  },
+  textWrapper: {
+    marginLeft: 15,
+    flex: 1,
+  },
+  dateText: {
+    fontSize: 12,
+    marginTop: 4,
+    opacity: 0.6,
   },
   itemTextChecked: {
     textDecorationLine: 'line-through',
