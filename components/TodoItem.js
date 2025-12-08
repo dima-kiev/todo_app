@@ -1,14 +1,39 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Animated, { FadeIn, FadeOut, Layout, useSharedValue, useAnimatedStyle, withSpring, withSequence } from 'react-native-reanimated';
 import SmartText from './SmartText';
 import { useTheme } from '../context/ThemeContext';
 
 export default function TodoItem({ item, pressHandler, deleteHandler }) {
   const { colors } = useTheme();
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handlePress = () => {
+    scale.value = withSequence(
+      withSpring(0.95),
+      withSpring(1)
+    );
+    pressHandler(item.id);
+  };
 
   return (
-    <View style={[styles.itemContainer, { backgroundColor: colors.card, shadowColor: colors.text }]}>
-      <TouchableOpacity onPress={() => pressHandler(item.id)} style={styles.itemTextContainer}>
+    <Animated.View
+      entering={FadeIn}
+      exiting={FadeOut}
+      layout={Layout.springify()}
+      style={[
+        styles.itemContainer,
+        { backgroundColor: colors.card, shadowColor: colors.text },
+        animatedStyle
+      ]}
+    >
+      <TouchableOpacity onPress={handlePress} style={styles.itemTextContainer}>
         <View style={[styles.checkbox, { borderColor: colors.primary }, item.completed && { backgroundColor: colors.primary }]}>
           {item.completed && <Text style={styles.checkmark}>✓</Text>}
         </View>
@@ -24,7 +49,7 @@ export default function TodoItem({ item, pressHandler, deleteHandler }) {
       <TouchableOpacity onPress={() => deleteHandler(item.id)} style={styles.deleteButton}>
         <Text style={styles.deleteText}>✕</Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 }
 
